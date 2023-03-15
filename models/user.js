@@ -19,7 +19,19 @@ const UserSchema = new Schema(
   age: { 
     type: Number, 
     min: 18 },
-  date_created: { type: Date, default: Date.now }
+  date_created: { 
+    type: Date, 
+    default: Date.now },
+  friends: [
+    {
+        type: Schema.Types.ObjectId,
+        ref: 'user'
+    },],
+  thoughts: [
+    {
+        type: Schema.Types.ObjectId,
+        ref: 'thought'
+    },],
 },
 {
     toJSON: {
@@ -29,6 +41,6 @@ const UserSchema = new Schema(
   }
 );
 
-const user = model('user', UserSchema);
+const User = model('User', UserSchema);
 
-module.exports = user;
+module.exports = User;

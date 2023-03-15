@@ -29,6 +29,7 @@ const thoughtSchema = new Schema(
   {
     toJSON: {
       virtuals: true,
+      getters: true,
     },
     id: false,
   }
@@ -40,6 +41,6 @@ thoughtSchema
     return this.meta.upvotes;
   });
 
-const thought = model('thought', thoughtSchema);
+const Thought = model('Thought', thoughtSchema);
 
-module.exports = thought;
+module.exports = Thought;
