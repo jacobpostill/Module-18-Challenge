@@ -7,7 +7,7 @@ module.exports = {
       .catch((err) => res.status(500).json(err));
   },
   getSingleUser(req, res) {
-    User.findOne({ _id: req.params.ObjectId })
+    User.findOne({ _id: req.params.id })      
       .select('-__v')
       .populate('thoughts')
       .then((user) =>
@@ -15,8 +15,10 @@ module.exports = {
           ? res.status(404).json({ message: 'No user with that ID' })
           : res.json(user)
       )
-      .catch((err) => res.status(500).json(err));
-  },
+      .catch((err) =>{
+        console.log(err)
+         res.status(500).json(err)
+        });  },
   // create a new user
   createUser(req, res) {
     User.create(req.body)
@@ -26,7 +28,7 @@ module.exports = {
 
   updateUser(req, res) {
     User.findByIdAndUpdate(
-      { _id: req.params.ObjectId },
+      { _id: req.params.id },
       { $set: req.body },
       { new: true })
       .then((user) => 
@@ -34,11 +36,13 @@ module.exports = {
           ? res.status(404).json({ message: 'No user with that ID' })
           : res.json(user)
       )
-      .catch((err) => res.status(500).json(err));
-  },
+      .catch((err) =>{
+        console.log(err)
+         res.status(500).json(err)
+        });  },
 
   deleteUser(req, res) {
-    User.findByIdAndRemove({ _id: req.params.ObjectId })
+    User.findByIdAndRemove({ _id: req.params.id })
       .then((user) => {
         if (!user) {
           return res.status(404).json({ message: 'No user with that ID' });

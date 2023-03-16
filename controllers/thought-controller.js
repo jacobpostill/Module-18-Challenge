@@ -7,7 +7,7 @@ module.exports = {
       .catch((err) => res.status(500).json(err));
   },
   getSingleThought(req, res) {
-    Thought.findOne({ _id: req.params.thoughtId })
+    Thought.findOne({ _id: req.params.id })
       .then((thought) =>
         !thought
           ? res.status(404).json({ message: 'No thought with that ID' })
@@ -20,7 +20,7 @@ module.exports = {
     Thought.create(req.body)
       .then((thought) => {
         return User.findOneAndUpdate(
-          { _id: req.body.userId },
+          { username: req.body.username },
           { $addToSet: { thought: thought._id } },
           { new: true }
         );
@@ -30,7 +30,7 @@ module.exports = {
           ? res.status(404).json({
               message: 'Thought created, but found no user with that ID',
             })
-          : res.json('Created the thought 🎉')
+          : res.json('Created the thought')
       )
       .catch((err) => {
         console.log(err);
@@ -39,7 +39,7 @@ module.exports = {
   },
   updateThought(req, res) {
     Thought.findOneAndUpdate(
-      { _id: req.params.thoughtId },
+      { _id: req.params.id },
       { $set: req.body },
       { runValidators: true, new: true }
     )
@@ -54,13 +54,13 @@ module.exports = {
       });
   },
   deleteThought(req, res) {
-    Thought.findOneAndRemove({ _id: req.params.thoughtId })
+    Thought.findOneAndRemove({ _id: req.params.id })
       .then((thought) =>
         !thought
           ? res.status(404).json({ message: 'No thought with this id!' })
           : User.findOneAndUpdate(
-              { thought: req.params.thoughtId },
-              { $pull: { thought: req.params.thoughtId } },
+              { thought: req.params.id },
+              { $pull: { thought: req.params.id } },
               { new: true }
             )
       )
